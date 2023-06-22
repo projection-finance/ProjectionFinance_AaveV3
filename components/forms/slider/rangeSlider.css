@@ -1,0 +1,23 @@
+.my-slider {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.my-slider:focus {
+    outline: none;
+}
+
+/* hadler */
+.my-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 15px;
+    width: 8px;
+    background: #4F7FFA;
+    border: 2px solid white;
+    border-radius: 2px;
+    cursor: pointer;
+    -webkit-appearance: none;
+    margin-top: -32px;
+    position: relative;
+    z-index: 2;
+}
