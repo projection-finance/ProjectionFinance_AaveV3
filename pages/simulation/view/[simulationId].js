@@ -677,21 +677,21 @@ export default function ViewSimulation() {
                         const actions = selectedData?.actions;
                         const value = this.y >= 1000000 ? `$${(this.y / 1000000).toFixed(2)}M` : `$${this.y.toFixed(2)}`;
                         return `
-        <div class="tooltip-container">
-          <div class="date-title">
+        <div className="tooltip-container">
+          <div className="date-title">
             <div>${Highcharts.dateFormat('%b %d, %Y', this.x)}</div>
             <div>value: ${value}</div>
           </div>
           ${actions && actions.length ? actions.map((item, index) => (
-          `<div div class="detail-container" key=${index}>
-            <div class="detail-info">${item?.actionName}</div>
-            <div class="values-container">
-              <div class="percent-value">${item?.actionDetails}</div>
-              <div class="detail-time">${item?.actionHour}</div>
+          `<div div className="detail-container" key=${index}>
+            <div className="detail-info">${item?.actionName}</div>
+            <div className="values-container">
+              <div className="percent-value">${item?.actionDetails}</div>
+              <div className="detail-time">${item?.actionHour}</div>
             </div>
           </div>`
         )) : (
-            `<div class="detail-container">0 Action</div>`
+            `<div className="detail-container">0 Action</div>`
           )}
         </div>`;
       }
@@ -970,7 +970,7 @@ export default function ViewSimulation() {
           {/* <Heading title={rangeValue < lastKey ? "Disabled" : "Enabled"} sub="Add an action" className="mx-4 pr-8 border-r border-white/20" /> */}
                 <ButtonOutlined className={'px-1 text-xs'} label="Edit Gas" onClick={() => onOpenGasModal()}/> 
                 <ButtonOutlined className={'ml-4 px-1 text-xs'} label="Change eMode" disabled title="Coming soon"/>
-                <div class="ml-auto">
+                <div className="ml-auto">
                 <ButtonOutlined className={'px-1 text-xs'} label="Reset Actions" onClick={() => onOpenResetModal()}/>
                 </div>
           </div>
