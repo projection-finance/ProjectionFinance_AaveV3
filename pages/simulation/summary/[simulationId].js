@@ -7,7 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import UpdownBadge from "../../../components/badges/UpdownBadge";
 import StatusText from "../../../components/paragraph/StatusText";
-
+import { Maths } from "../../../utils/maths";
 import ActionsTable from '../../../blocks/tables/ActionsTable';
 
 import SummaryLine from '../../../blocks/charts/summary/SummaryLine';

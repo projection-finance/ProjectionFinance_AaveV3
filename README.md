@@ -1,10 +1,6 @@
 # Projection Finance
 
-CC BY-NC 4.0
-
-This work is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License. To view a copy of this license, visit http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
-
-contact@projection.finance
+Frontend application projection.finance.
 
 ## Getting Started
 
@@ -20,19 +16,17 @@ yarn install
 
 Copy `.env.example` to `.env`
 
+### 3. Launch DB instance with docker
+
+```bash
+docker-compose up
+```
+
 This is optional, actually we use MongoDB Atlas, the could hosted version of MongoDB.
 
 Credentials are available on `.env.example`
 
-### 3. Change key provider
-
-service/aave.js
-
-```
-var providerUrl = 'https://mainnet.infura.io/v3/key';
-```
-
-### 4. Synchronise Database (PostgreSQL) and Prisma ORM
+### 4. Synchronise Database and Prisma ORM
 
 ```bash
 npx prisma db push
@@ -49,3 +43,44 @@ npx prisma studio
 ```bash
 npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+### 6. Bugs Notes
+
+Issue with Prisma on `increment` operator. An `Int` field need to be set before being able to `increment`
+
+```graphql
+model Post {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  content   String?
+  published Boolean @default(false)
+  viewCount Int     @default(0) // this field need to be able to increment
+  author    User?   @relation(fields: [authorId], references: [id])
+  authorId  String?
+}
+```
+
+### 7. Dev Notes
+
+Here a task list that needs to be done before going to production.
+
+- Secure Api calls with supertoken
+- Clarify the use of `userId` variable, sometimes it reprensent id from Supertoken, sometimes our user ID
+
+
+apres un changement : 
+
+npx prisma db push
+
+### Postgre Notes
+
+SELECT setval(pg_get_serial_sequence('"User"', 'id'), coalesce(max(id)+1, 1), false) FROM "User";
+
+SELECT setval(pg_get_serial_sequence('"Projection"', 'id'), coalesce(max(id)+1, 1), false) FROM "Projection";
+
+SELECT setval(pg_get_serial_sequence('"Simulation', 'id'), coalesce(max(id)+1, 1), false) FROM "Simulation";
+
+
+npx prisma generate

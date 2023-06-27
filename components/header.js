@@ -67,8 +67,8 @@ export default function Header(props) {
                   <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                     <div className="flex flex-shrink-0 items-center">
                     
-                    <Link href="https://www.projection.finance" passHref legacyBehavior>
-    <a target="_blank" rel="noopener noreferrer" className="p-0 m-0 leading-none">
+                    <Link href="/" passHref legacyBehavior>
+    <a rel="noopener noreferrer" className="p-0 m-0 leading-none">
         <Image src={logoDark} width="236" height="42" alt='logo' />
     </a>
 </Link>

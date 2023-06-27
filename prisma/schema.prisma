@@ -17,4 +17,6 @@ model SimulationAave {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   uid          String   @unique
+  isPrivate     Boolean  @default(false)
+  duration     String
 }

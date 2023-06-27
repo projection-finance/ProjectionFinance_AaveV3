@@ -4,7 +4,9 @@ export default async (req, res) => {
   const { path } = req.query;
 
   if (path == "create") {
-    const { projectionPositions, name, tokenPositions, uid, displayAddress} = req.body;
+    const { projectionPositions, name, tokenPositions, uid, displayAddress, isPrivate, duration } = req.body;
+
+    // console.log(projectionPositions, 'hhhhhhhhhhhhhhhhh')
     try {
       const result = await prisma.SimulationAave.create({
         data: {
@@ -12,6 +14,8 @@ export default async (req, res) => {
           projectionPositions,
           tokenPositions,
           uid,
+          isPrivate,
+          duration,
           displayAddress
         },
       });
@@ -51,7 +55,7 @@ export default async (req, res) => {
         where: {
           ...(simulationId ? { uid: simulationId } : {}),
         },
-        
+
       });
       res.status(200).json(result);
     } catch (err) {
@@ -60,6 +64,25 @@ export default async (req, res) => {
     }
   }
 
+  if (path == "read_all_public") {
+    const { skip, take } = req.body;
+    try {
+      const result = await prisma.SimulationAave.findMany({
+        skip,
+        take,
+        orderBy: {
+          createdAt: "desc",
+        },
+        where: {
+          ...({ isPrivate: false }),
+        },
+      });
+      res.status(200).json(result);
+    } catch (err) {
+      console.log(err);
+      res.status(403).json({ err: "Error while getting simulations." });
+    }
+  }
 
   if (path == "delete") {
     const { simulationId } = req.body;

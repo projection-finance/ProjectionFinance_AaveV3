@@ -6,7 +6,8 @@ import React, { useEffect } from "react";
 import { legacy_createStore as createStore } from 'redux';
 import { Provider as ReduxProvider } from 'react-redux';
 
-
+import SuperTokensReact, { SuperTokensWrapper, redirectToAuth } from "supertokens-auth-react";
+import * as SuperTokensConfig from "../supertokens/frontendConfig";
 
 import ThemeProvider from "../context/ThemeProvider";
 
@@ -15,7 +16,10 @@ import rootReducer from '../redux/reducers/index.js';
 import "nprogress/nprogress.css";
 import NProgress from "nprogress";
 
+if (typeof window !== "undefined") {
 
+  SuperTokensReact.init(SuperTokensConfig.frontendConfig());
+};
 
 const store = createStore(rootReducer);
 
@@ -36,12 +40,12 @@ function MyApp({ Component, pageProps, router }) {
       router.events.off("routeChangeComplete", handleRouteDone);
       router.events.off("routeChangeError", handleRouteDone);
     };
-  }, []);
+  }, [router.events]);
 
   return (
     <ReduxProvider store={store}>
       <ThemeProvider>
-      <Component {...pageProps} />
+        <Component {...pageProps} />
       </ThemeProvider>
     </ReduxProvider>
   );

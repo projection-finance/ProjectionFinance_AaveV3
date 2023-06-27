@@ -7,6 +7,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import ModalLoading from "./modalLoading";
 import Input from '../components/forms/inputs/Input';
 import Select from '../components/forms/selects/Select';
+import CheckButton from "./forms/CheckButton";
 import Range from '../components/range';
 import axios from 'axios'
 import { ethers } from "ethers";
@@ -56,12 +57,12 @@ export default function ModalSelectWallet(props) {
   const [wallet, setWallet] = useState("0xd56353e0bdc41ad232f9d11109868703c1e2b2b9");
   const [simulationName, setSimulationName] = useState("");
   const [selectedMarket, setSelectedMarket] = useState('mainnet_v3');
-  // const [startDate, setStartDate] = useState();
+  const [isPrivate, setIsPrivate] = useState(false);
   const [endDate, setEndDate] = useState();
   const [duration, setDuration] = useState('30');
 
   const [startDate,] = useState(new Date());
-  
+
   useEffect(() => {
     const end = moment(startDate).add(duration, 'days').valueOf();
     setEndDate(new Date(end))
@@ -83,6 +84,11 @@ export default function ModalSelectWallet(props) {
 
 
   async function handleSubmit() {
+    if (!simulationName) {
+      setError('Simulation name is required.')
+      return;
+    }
+    setError('');
     setLoading(true);
     const provider = new ethers.providers.StaticJsonRpcProvider("https://cloudflare-eth.com");
     const [ensAddress, evmAddress] = wallet.includes(".eth") || wallet.includes(".ETH") ? [wallet, await provider.resolveName(wallet)] : [wallet, wallet];
@@ -158,11 +164,17 @@ export default function ModalSelectWallet(props) {
           config: tokenConfig,
           values: Array(tokenDates.length + 1).fill(tokenPrice)
         });
-
       })
 
-      const result = await axios.post("/api/simulation/create", { projectionPositions: positionData?.data?.positions, name: simulationName, tokenPositions, uid: uuidv4(), displayAddress});
-
+      const result = await axios.post("/api/simulation/create", {
+        projectionPositions: positionData?.data?.positions,
+        name: simulationName, tokenPositions,
+        uid: uuidv4(),
+        displayAddress,
+        isPrivate,
+        duration
+      });
+      document.cookie = `user_cookie=true;`;
       setLoading(false);
       props
         ?.setOpen(false);
@@ -177,6 +189,10 @@ export default function ModalSelectWallet(props) {
   const handleClose = () => {
     setError(false);
   };
+
+  const handlePrivate = (e) => {
+    setIsPrivate(e.target.checked);
+  }
 
   return (
     <>
@@ -218,6 +234,9 @@ export default function ModalSelectWallet(props) {
                           options={options}
                           onChange={handleMarket}
                         />
+                      </div>
+                      <div className="mt-4">
+                        <CheckButton checked={isPrivate} onChange={handlePrivate} label="Make it private" />
                       </div>
                       {error && <div className="bg-red-sizy/10 p-2 rounded text-red-sizy text-xs mt-2 flex justify-between items-center">
                         <p>{error}</p>
