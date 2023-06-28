@@ -14,7 +14,61 @@ export default function Projections() {
   const [publicSimulations, setPublicSimulations] = useState([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
-
+  const getMarketInfo = (market) => {
+    let marketName, gasToken, eModes;
+  
+    switch (market) {
+      case "mainnet_v3":
+        marketName = 'Ethereum';
+        gasToken = 'ETH';
+        eModes = ['Disabled', 'ETH correlated'];
+        break;
+      case "polygon_v3":
+        marketName = 'Polygon';
+        gasToken = 'MATIC';
+        eModes = ['Disabled', 'Stablecoins', 'MATIC correlated'];
+        break;
+      case "fantom_v3":
+        marketName = 'Fantom';
+        gasToken = 'ETH';
+        eModes = ['Disabled', 'Stablecoins'];
+        break;
+      case "arbitrum_v3":
+        marketName = 'Arbitrum';
+        gasToken = 'ETH';
+        eModes = ['Disabled', 'Stablecoins', 'ETH correlated'];
+        break;
+      case "optimism_v3":
+        marketName = 'Optimism';
+        gasToken = 'ETH';
+        eModes = ['Disabled', 'Stablecoins'];
+        break;
+      case "avalanche_v3":
+        marketName = 'Avalanche';
+        gasToken = 'AVAX';
+        eModes = ['Disabled', 'Stablecoins', 'AVAX correlated'];
+        break;
+      case "harmony_v3":
+        marketName = 'Harmony';
+        gasToken = 'ONE';
+        eModes = ['Disabled', 'Stablecoins'];
+        break;
+      default:
+        marketName = 'Ethereum';
+        gasToken = 'ETH';
+        eModes = ['Disabled', 'ETH correlated'];
+        break;
+    }
+  
+    // Do something with the market info
+    // For example, you can return an object containing the values
+    return {
+      marketName,
+      gasToken,
+      eModes,
+    };
+  };
+ 
   useEffect(() => {
     setLoading(true);
     axios.post("/api/simulation/read_all_public", { skip: 0 })
@@ -43,20 +97,21 @@ export default function Projections() {
       <div className="mt-10">
         <div className="border-b mb-5 border-gray-700/50 my-2 px-4 py-2 grid grid-cols-12 ">
           <div className="text-gray-lighter col-span-2">Simulation Name</div>
+          <div className="text-gray-lighter col-span-1">Market</div>
           <div className="text-gray-lighter col-span-5">Wallet Address</div>
           <div className="text-gray-lighter col-span-2">Start Date</div>
           <div className="text-gray-lighter col-span-1">Duration</div>
-          <div className="text-gray-lighter col-span-1">Action</div>
         </div>
         {loading ? <div className="w-10 h-10 mx-auto mt-20"><Loading /></div> :
           <>
             {publicSimulations.slice((page - 1) * 5, page * 5).map((item, index) => (
+              
               <div key={index} className="border border-gray-700/50 rounded-md my-2 px-4 py-2 grid grid-cols-12 hover:cursor-pointer" onClick={() => handleView(item.uid)} >
                 <div className="text-gray-lighter col-span-2">{item?.name || "-"}</div>
+                <div className="text-gray-lighter col-span-1">{getMarketInfo(item?.projectionPositions.network).marketName}</div>
                 <div className="text-gray-lighter col-span-5">{item?.displayAddress}</div>
                 <div className="text-gray-lighter col-span-2">{formatMonthYearDate(milliToDateMilli(new Date(item?.createdAt))) || "-"}</div>
-                <div className="text-gray-lighter col-span-1">{item?.duration || "-"}</div>
-                <EyeIcon className="w-5 h-5 text-gray-lighter cursor-pointer col-span-1" onClick={() => handleView(item.uid)} />
+                <div className="text-gray-lighter col-span-1">{item?.duration || "-"} days</div>
               </div>
             ))}
             <div className="w-full flex justify-center mt-10">
