@@ -608,11 +608,11 @@ export default function ViewSummarySimulation() {
         <div className="col-span-3">
           <Card className="py-4 flex items-center">
             <div className="w-1/3 px-4">
-              <div className="text-gray-light text-xxs">Portfolio - start state</div>
+              <div className="text-gray-light text-xxs">Net worth - start state</div>
               <div className="text-gray-dark dark:text-white text-xl font-semibold mt-1">{startValue} $</div>
             </div>
             <div className="w-1/3 border-l border-l-gray-dark px-4">
-              <div className="text-gray-light text-xxs">Portfolio - end state</div>
+              <div className="text-gray-light text-xxs">Net worth - end state</div>
               <div className=" mt-1 flex items-center gap-2">
                 <div className="text-gray-dark dark:text-white text-xl font-semibold">{endValue} $</div>
                 {startValue < endValue ? (
